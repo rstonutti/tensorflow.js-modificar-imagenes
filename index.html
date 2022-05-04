@@ -12,10 +12,15 @@
     <script>
       const d = document;
       d.addEventListener("DOMContentLoaded", () => {
+        console.log("Inicio", tf.memory().numTensors, tf.memory().numBytes);
+
         const $cocaImage = d.getElementById("coca"),
           $cocaCanvas = d.getElementById("cocaCanvas"),
-          nuevoTamaño = [512, 512],
-          cocaTensor = tf.browser.fromPixels($cocaImage),
+          nuevoTamaño = [512, 512];
+
+        console.log("Antes de la modificación", tf.memory().numTensors, tf.memory().numBytes);
+
+        const cocaTensor = tf.browser.fromPixels($cocaImage),
           tensorCocaRevertido = tf.reverse(cocaTensor, 1),
           tensorCocaModificado = tf.image.resizeNearestNeighbor(
             tensorCocaRevertido,
@@ -23,11 +28,17 @@
             true
           );
 
+        console.log("Despues de la modificación", tf.memory().numTensors, tf.memory().numBytes);
+
         tf.browser.toPixels(tensorCocaModificado, $cocaCanvas).then(() => {
           cocaTensor.dispose();
           tensorCocaRevertido.dispose();
           tensorCocaModificado.dispose();
+
+          console.log("Final", tf.memory().numTensors, tf.memory().numBytes);
         });
+
+        
       });
     </script>
   </body>
